@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RandallStevens">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="容器 VS 无服务 多年以来，我们一直习惯于把应用程序部署在物理服务器之上。而由此带来的资源管理或供应责任自然全部由我们自己承担。这种方式带来了以下几个问题：  即使完全没有任何负载需求，服务器也在持续运行，因此会消耗大量不必要的资源。 需要负责完成服务器维护以及正常运行时间保障等日常工作。 需要负责对服务器进行适当的安全更新。 随着使用量的增加，我们需要亲自管理服务器扩展工作;与之对应，当工作负">
+<meta property="og:type" content="article">
+<meta property="og:title" content="容器 VS 无服务">
+<meta property="og:url" content="https://randallstevens-chn.github.io/2022/05/07/%E6%97%A0%E6%9C%8D%E5%8A%A1%20VS%20%20%E5%AE%B9%E5%99%A8%E5%8C%96/index.html">
+<meta property="og:site_name" content="RandallStevens">
+<meta property="og:description" content="容器 VS 无服务 多年以来，我们一直习惯于把应用程序部署在物理服务器之上。而由此带来的资源管理或供应责任自然全部由我们自己承担。这种方式带来了以下几个问题：  即使完全没有任何负载需求，服务器也在持续运行，因此会消耗大量不必要的资源。 需要负责完成服务器维护以及正常运行时间保障等日常工作。 需要负责对服务器进行适当的安全更新。 随着使用量的增加，我们需要亲自管理服务器扩展工作;与之对应，当工作负">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-07T12:24:53.828Z">
+<meta property="article:modified_time" content="2022-05-16T18:05:45.362Z">
+<meta property="article:author" content="RandallStevens">
+<meta property="article:tag" content="服务部署">
+<meta property="article:tag" content="容器化">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>容器 VS 无服务 - RandallStevens</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"randallstevens-chn.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":80,"cursorChar":" ♫","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 78vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>RandallStevens&#39;Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-books"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于我
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/post_page_img.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="容器 VS 无服务">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-05-07 20:24" pubdate>
+        2022年5月7日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      46 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">容器 VS 无服务</h1>
+            
+            <div class="markdown-body">
+              <h1 id="容器-VS-无服务"><a href="#容器-VS-无服务" class="headerlink" title="容器 VS 无服务"></a>容器 VS 无服务</h1><p> 多年以来，我们一直习惯于把应用程序部署在物理服务器之上。而由此带来的资源管理或供应责任自然全部由我们自己承担。这种方式带来了以下几个问题：</p>
+<ul>
+<li>即使完全没有任何负载需求，服务器也在持续运行，因此会消耗大量不必要的资源。</li>
+<li>需要负责完成服务器维护以及正常运行时间保障等日常工作。</li>
+<li>需要负责对服务器进行适当的安全更新。</li>
+<li>随着使用量的增加，我们需要亲自管理服务器扩展工作;与之对应，当工作负载回落，我们又得进行规模收缩。</li>
+</ul>
+<p>面对这么多现实问题，中小型企业乃至个人显然不愿意、甚至没办法投入相应的精力。另外，传统服务器模式的上述特性还会影响产品的整体上市时间与交付成本，而这些正是决定定制化软件开发命运的核心所在。因此产生了新型的部署方式</p>
+<h2 id="容器化"><a href="#容器化" class="headerlink" title="容器化?"></a>容器化?</h2><p>​       容器化的出现解决了一个重要问题：确保软件在某一计算环境迁移至另一计算环境时，仍能正确运行。容器化应用程序还帮助不同团队得以独立处理应用程序中的不同部分;只要各组件间的交互方式不出现重大变化，各团队就能安心打理自己的环节。如此一来，整个软件开发流程会变得更轻松、开发者也能更快测试一切潜在错误。 （即项目 环境迁移水土不服问题）.</p>
+<p>​      在敏捷化、DevOps的世界中，上述能力的重要意义不言自明。容器能帮助开发者建立起信心，让他们坚信自己的软件在任何环境下都能顺利运行。也正是容器化趋势催生出了当下同样热门的“微服务架构”。</p>
+<p>下面来看容器中常见的几种绑定要素：</p>
+<ul>
+<li>应用程序本体</li>
+<li>依赖项</li>
+<li>库</li>
+<li>二进制文件</li>
+<li>配置文件</li>
+</ul>
+<p>​     但为了管理这些容器，我们还需要仰仗另一套专用软件，例如Docker Swarm、Kubernetes等等。这些软件可以帮助我们编排容器，将其正确推送至不同的目标设备并保证它们在那里顺畅运行。</p>
+<h2 id="无服务"><a href="#无服务" class="headerlink" title="无服务?"></a>无服务?</h2><p>​     “无服务器计算”的概念于是应愿而生。借助无服务器计算，我们可以获得一套执行模型，由云服务商(包括AWS、Azure或者Google Cloud)通过动态分配的资源执行一段段代码。作为用户，我们只需要承担应用程序代码运行所对应的资源用量费用。如果把这种计算成本与传统服务器相比较，我们会发现支出将得到大幅削减。这样，我们的整体计算体验将达成“无服务器”状态(服务器资源的管理成本更低)。所以再次强调，无服务器不是没有服务器——基础设施还在，只是不再困扰我们。</p>
+<h2 id="容器与无服务对比"><a href="#容器与无服务对比" class="headerlink" title="容器与无服务对比"></a>容器与无服务对比</h2><h3 id="1-寿命限制"><a href="#1-寿命限制" class="headerlink" title="1.寿命限制"></a>1.寿命限制</h3><p>无服务器：大家应该了解，函数的寿命往往很“短”。这里的短，一般是在5分钟以内。函数的这种临时特性，意味着运行该函数的容器也会在一次执行之后即告清除。</p>
+<p>但也正是这种较短的生命周期，让函数获得了极高的敏捷性，帮助开发人员得以自由灵活地将应用程序推向各类易于扩展的生产环境。</p>
+<p>容器：容器的情况则有所不同。容器始终保持运行，而且在执行完毕后也不会被消除。这就让容器得以充分利用缓存性能优势，同时被迫放弃了瞬时扩展的能力。</p>
+<h3 id="2-状态持久性"><a href="#2-状态持久性" class="headerlink" title="2. 状态持久性"></a>2. 状态持久性</h3><p>无服务器：如前文所述，函数总是具有临时性或者说“短寿命”特性，这也决定了它们的无状态属性。而函数越是保持这种无状态性，就适合被用来组合并构建起强大的整体解决方案。</p>
+<p>无状态计算的强大之处，在于帮助开发人员编写出众多强大的、可重用的函数并灵活组合起来。但也正是由于这种无状态性，导致函数无法缓存任何内容以供后续使用。没有了缓存机制，其延迟水平也就更高。</p>
+<p>容器：在容器一边，我们倒是可以充分发挥缓存优势。为了保证即使在容器终止后数据仍能正常存储，我们需要一种存储机制来容纳容器之外的数据。说到这里，有些朋友可能要问，缓存有那么重要吗?为什么我们在讨论中总要提起缓存?</p>
+<p>确实重要，因为如果容器将要在目标文件上生成的对象之前就曾经出现过，那么直接重用原有结果能够节约下大量时间。而这些原有结果正是要由缓存来存放。所以在缓存的加持下，新容器能获得极快的构建速度。</p>
+<h3 id="3-无延迟与启动时间"><a href="#3-无延迟与启动时间" class="headerlink" title="3. 无延迟与启动时间"></a>3. 无延迟与启动时间</h3><p>无服务器：函数的无状态与不可缓存两大特性，决定了其必然不具备在待机期间持续运行的函数副本，这就必然导致调用时间更长。所以函数只有两种状态：1)“保温”状态，即代码根据命令执行的15分钟以内;除此之外的任何其他时段皆属于2)冷启动状态。</p>
+<p>结果就是，对于存在众多并发用户的应用场景，无服务器计算必然存在延迟问题。为此，大家可以添加以下代码使得函数始终“保温”。</p>
+<p>但这毕竟只是权宜之计，只适用于函数数量不大的场景。面对数量众多的大规模系统，我们根本无法正确管理所有虚拟函数。所以以上方法只适用于函数数量较少，没必要惊动整体容器的情况。</p>
+<p>容器：容器诞生于前无服务器时代，所以它当然不像无服务器那样“转瞬即逝”。容器就在那里，随时准备着接收我们的HTTPS请求、再以低延迟甚至即时方式做出响应。凭借着缓存优势，容器的启动速度很快、无需重复创建文件，单靠缓存数据引用就足够定位并重用原有结构。</p>
+<h3 id="4-可扩展性"><a href="#4-可扩展性" class="headerlink" title="4. 可扩展性"></a>4. 可扩展性</h3><p>无服务器：在无服务器架构中，应用程序后端会自动且固有地进行扩展以满足负载需求。另外，无服务器计算更像是自来水供应系统：只要服务商把总闸打开，消费者那边就永远会有水可用，且只需要为自己家中龙头里流出的水量付费。相比之下，容器技术则更像是挨家挨户配送的桶装饮用水，在可扩展性上显然不及无服务器计算。</p>
+<p>容器：在使用基于容器的架构时，开发者需要根据需求提前部署相应数量的容器，借此满足应用程序的扩展申请。此外，随着需求量增加，我们往往需要部署更多容器以应对负载波动。而在实际需求超过容器配置预期时，就必然要出现可扩展性瓶颈、且没有很好的即时解决办法。</p>
+<h3 id="5-可移植性与迁移"><a href="#5-可移植性与迁移" class="headerlink" title="5 可移植性与迁移"></a>5 可移植性与迁移</h3><p>无服务器：假定大家已经在使用AWS的多种不同服务，这时候选择Lambda函数肯定是明智之举，因为其能够与其他服务顺畅集成且可支持快速访问。</p>
+<p>即使您并没有使用AWS服务、而且担心供应商锁定问题，也可以通过域映射/DNS变更等方式保证代码中使用的所有API端点和URL始终处于您的控制之下。</p>
+<p>这样我们就可以随时切断特定服务，并将其重新定向至您所选定的其他端点(例如其他FaaS服务商)。这种方式显然比在不受控制或者您无法调整的端点中部署硬编码代码要安全得多。</p>
+<p>但考虑到市面上FaaS服务商众多，大家对供应商锁定问题的担忧也自有道理。以Lambda为例，如果它无法满足您所在地区的特定要求，大家可以执行以下操作。一切Lambda处理程序的代码都应处于隔离状态，仅仅以“垫片”的形式在其他模块/类中充当逻辑。</p>
+<p>这种方式不仅提高了可重用性，而且能够大大降低重构时Lambda迁移的便捷度与直接性。另外，这种方式还有利于支持单元测试。下面来看瘦Lambda处理程序实例：</p>
+<p>说起迁移，目前人们对于如何将FaaS融入现有DevOps框架仍充当争议。组织可能一口气编写了几百个函数，但在一段时间之后再也没人清楚哪些函数中包含着哪些其他函数、又有多少函数仍在正常使用。</p>
+<p>容器：如果大家选择了基于容器的微服务架构，就能享受到由此带来的良好可移植性。我们可以轻松将程序代码从开发者的笔记本电脑处转移到本地数据中心或者不同云服务商的云计算平台，整个过程既不费力也不费神。</p>
+<p>随着企业承担的创新压力越来越大、产品上市时间越来越短，微服务架构的加持能帮助大家快速为应用程序建立起全新版本。因此，如果大家是出于降低迁移难度、使用丰富的容器技术堆栈等目的而决定从单体式应用程序转向容器，那么微服务架构应该是个理想的探索起点。</p>
+<p>然而，在云平台上运行容器时仍然涉及众多依赖项。例如代码升级需要协同规划，具体涵盖容器主机、容器镜像、容器引擎以及容器编排等。</p>
+<p>对于某些需要迁移至微服务形式的遗留应用程序，直接“容器化”所带来的操作难度和成本往往要低于对整体应用程序进行重构。</p>
+<h3 id="6-开发环境与语言支持"><a href="#6-开发环境与语言支持" class="headerlink" title="6. 开发环境与语言支持"></a>6. 开发环境与语言支持</h3><p>无服务器：主流FaaS服务商所能支持的语言种类非常有限，主要有Node.js、Python、Java、C#以及Go(以AWS Lambda为例)。</p>
+<p>容器：容器能为大家提供良好的异构开发环境、供您使用一切您所熟悉的技术堆栈。考虑到如今的开发者往往同时精通多种开发语言，这种广泛的支持性在人员招聘层面往往极具优势。</p>
+<p>如果大家正打算为新项目招聘开发人员，那容器能避免我们过多考虑微服务架构中的语言选择。不同微服务可以独立部署、独立扩展，各服务之间拥有明确的模块边界，不同服务可以由任何语言编写并由不同团队负责管理。</p>
+<h3 id="7-系统控制"><a href="#7-系统控制" class="headerlink" title="7. 系统控制"></a>7. 系统控制</h3><p>无服务器：由于消除了基础设施层面的复杂性，AWS Lambda等FaaS服务中的函数用起来可谓便捷顺滑。这样，大家可以更多专注于产品开发与业务成果实现。也就是说，无服务器计算能够显著缩短产品的上市时间，但容器却不然。但以AWS Lambda为例，无服务器计算在使用时有着诸多注意事项、一旦违反很可能引发问题。</p>
+<p>容器：容器方面的难题主要集中在集群配置上，这些严峻的挑战要求我们具备扎实的容器技术背景。好在微服务层面的控制难度不算很高，而且Kubernetes等编排框架也能帮助我们提高架构的治理与控制效率。</p>
+<p>基于容器的微服务架构让我们掌握了对于容器系统的全面控制权，从而实现策略设置、资源分配与管理。此外，我们还能对安全和迁移服务进行精细化控制。</p>
+<p>而凭借这种完全控制特性，我们可以随时通过容器系统查看容器内外的基本情况，进而跨越多种环境和大量资源开展全面且有效的测试与调试。相比之下，我们无法验证函数的本地实现与测试，所以很难提前判断其运行性能。</p>
+<h3 id="8-高强度资源处理"><a href="#8-高强度资源处理" class="headerlink" title="8. 高强度资源处理"></a>8. 高强度资源处理</h3><p>让我们继续以AWS Lambda为例，如果某一函数的处理时长超过5分名，系统就会要求我们将该任务拆分成多个更小的任务。当然，类似的限制要求还有很多。</p>
+<p>大家最多可以为单一函数分配1.5 GB的内存，而部署包则不能超过50 MB。但在容器方面，我们则可根据应用程序的实际需求随意分配计算资源。</p>
+<h3 id="9-测试"><a href="#9-测试" class="headerlink" title="9. 测试"></a>9. 测试</h3><p>无服务器：我们往往很难对基于无服务器的Web应用程序进行测试，因为开发者通常无法在本地环境中重现这种实际后端环境。</p>
+<p>容器：由于各容器运行在部署时所处的同一平台之上，我们可以相对简单地在生产部署之前对基于容器的应用程序进行各类测试。</p>
+<h3 id="10-维护"><a href="#10-维护" class="headerlink" title="10. 维护"></a>10. 维护</h3><p>无服务器：无服务器类应用程序的维护难度比大多数人想象中低得多。由于无服务器服务商(例如AWS Lambda)一力承担起服务器的管理及软件更新等日常事务，因此整体维护负担会维持在很低的水平。</p>
+<p>容器：与帮助开发者告别维护烦恼的无服务器不同，容器要求开发者们继续承担从管理到更新的所有容器维护工作。</p>
+<h3 id="11-成本比较"><a href="#11-成本比较" class="headerlink" title="11. 成本比较"></a>11. 成本比较</h3><p>无服务器：之前已经提到，使用AWS Lambda等无服务器函数进行应用程序部署能帮助大家摆脱不必要的资源开销，确保应用程序代码只根据调用操作适时运行。这种形式完全不同于以往大家熟悉的无论用不用、都要持续付费的本地基础设施系统。</p>
+<p>容器：容器在成本方面表现得比较传统，同样是在没人用时也始终保持运行，所以客户需要根据服务器空间向云服务商付费。</p>
+<h3 id="12-部署时间"><a href="#12-部署时间" class="headerlink" title="12. 部署时间"></a>12. 部署时间</h3><p>无服务器： 由于无服务器函数在体量上小于容器微服务，而且其中不捆绑任何系统依赖项，所以每款应用程序的部署时长只需要几毫秒。另外，无服务器应用程序能够在代码部署完成后立即上线。</p>
+<p>容器：虽然容器的初始设置时间较长，但在全面配置设定完成之后，后续部署也能在几秒内结束。</p>
+<h2 id="容器与无服务选择"><a href="#容器与无服务选择" class="headerlink" title="容器与无服务选择"></a>容器与无服务选择</h2><h3 id="什么时候选无服务器-：无服务器用例解析"><a href="#什么时候选无服务器-：无服务器用例解析" class="headerlink" title="什么时候选无服务器?：无服务器用例解析"></a>什么时候选无服务器?：无服务器用例解析</h3><p>无服务器计算特别适合以下用例：</p>
+<ul>
+<li>如果您的流量模式会自动变化，那么无服务器计算不仅能自动消解波动、还能在没有流量时暂时关闭。</li>
+<li>如果大家担心服务器的维护成本以及应用程序消耗的资源，那就表明您适合选择无服务器计算。</li>
+<li>如果您不想花太多时间思考代码在哪里运行、具体怎么运行，请选择无服务器。</li>
+<li>无服务器网站与应用程序的编写与部署流程不涉及任何基础设施设置环节。因此，我们可以在几天之内通过无服务器计算构建起功能完备的应用程序或网站。</li>
+<li>无服务器架构允许您为应用程序构建起各类性能强劲的图像与视频服务。您可以使用这些服务动态调整图像大小，或者针对不同类型的目标设备执行视频转码等。</li>
+</ul>
+<h3 id="什么时候选容器-：容器用例解析"><a href="#什么时候选容器-：容器用例解析" class="headerlink" title="什么时候选容器?：容器用例解析"></a>什么时候选容器?：容器用例解析</h3><p>以下几种应用程序部署需求特别适合选择容器技术：</p>
+<ul>
+<li><p>如果您想要自主选择操作系统，并充分控制其中安装的编程语言和运行时版本。</p>
+</li>
+<li><p>如果您打算使用某些软件的特定版本，那容器也是最好的选择。</p>
+</li>
+<li><p>如果您之前一直在使用传统大型服务器来处理Web API、机器学习计算以及其他各种需要长时间运行的业务流程，不妨试试容器——运行效果基本一样，而成本却较传统服务器更低。</p>
+</li>
+<li><p>如果您打算开发新的容器原生应用程序。</p>
+</li>
+<li><p>如果您打算对某款体量庞大且极为复杂的单体式应用程序进行重构，那最好选择容器——容器更适合复杂的应用结构。</p>
+</li>
+<li><p>有些组织也在使用容器将现有应用程序直接迁移至更为现代的环境当中。Kubernetes等容器编排工具包含一系列明确的已知最佳实践，能够轻松管理大规模容器设置。</p>
+</li>
+<li><p>Docker等容器编排平台能够通过自动规模伸缩解决流量无法预测的问题(但请注意，容器的规模伸缩过程无法即时完成)。</p>
+<h3 id="什么时候选无服务器-：无服务器用例解析-1"><a href="#什么时候选无服务器-：无服务器用例解析-1" class="headerlink" title="什么时候选无服务器?：无服务器用例解析"></a>什么时候选无服务器?：无服务器用例解析</h3><p>无服务器计算特别适合以下用例：</p>
+<ul>
+<li>如果您的流量模式会自动变化，那么无服务器计算不仅能自动消解波动、还能在没有流量时暂时关闭。</li>
+<li>如果大家担心服务器的维护成本以及应用程序消耗的资源，那就表明您适合选择无服务器计算。</li>
+<li>如果您不想花太多时间思考代码在哪里运行、具体怎么运行，请选择无服务器。</li>
+<li>无服务器网站与应用程序的编写与部署流程不涉及任何基础设施设置环节。因此，我们可以在几天之内通过无服务器计算构建起功能完备的应用程序或网站。</li>
+<li>无服务器架构允许您为应用程序构建起各类性能强劲的图像与视频服务。您可以使用这些服务动态调整图像大小，或者针对不同类型的目标设备执行视频转码等。</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/">服务部署</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/">容器化</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/16/Java%20SPI/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java SPI</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/27/SpringBoot%20%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/">
+                        <span class="hidden-mobile">SpringBoot 自动配置原理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+    
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"left","width":300,"height":600},"mobile":{"show":true,"scale":0.5},"rect":"opacity:1","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
