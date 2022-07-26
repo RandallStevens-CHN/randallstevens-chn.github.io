@@ -16,18 +16,20 @@
   <meta name="author" content="RandallStevens">
   <meta name="keywords" content="">
   
-    <meta name="description" content="TODO">
+    <meta name="description" content="Java SPI  机制SPI  概述 SPI全称是Service Provider Interface （服务提供接口），它是jdk6引入的一种服务发现机制。服务提供方通过实现服务方制定的SPI的接口来提供服务；SPI机制负责完成服务发现与注入的职责.     通俗来说就是 服务负责制定标准，服务提供者负责提供符合标准的具体实现.     好处：spi以一种的插件的形式提供服务，极大的降低了系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java SPI">
 <meta property="og:url" content="https://randallstevens-chn.github.io/2022/05/16/Java%20SPI/index.html">
 <meta property="og:site_name" content="RandallStevens">
-<meta property="og:description" content="TODO">
+<meta property="og:description" content="Java SPI  机制SPI  概述 SPI全称是Service Provider Interface （服务提供接口），它是jdk6引入的一种服务发现机制。服务提供方通过实现服务方制定的SPI的接口来提供服务；SPI机制负责完成服务发现与注入的职责.     通俗来说就是 服务负责制定标准，服务提供者负责提供符合标准的具体实现.     好处：spi以一种的插件的形式提供服务，极大的降低了系统">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oss.randallstevens.top/mysql_spi.png">
 <meta property="article:published_time" content="2022-05-16T10:20:04.880Z">
-<meta property="article:modified_time" content="2022-05-16T18:06:29.756Z">
+<meta property="article:modified_time" content="2022-05-23T10:33:38.728Z">
 <meta property="article:author" content="RandallStevens">
-<meta property="article:tag" content="SPI">
+<meta property="article:tag" content="Java SPI">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oss.randallstevens.top/mysql_spi.png">
   
   
   <title>Java SPI - RandallStevens</title>
@@ -185,7 +187,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4 字
+      3k 字
     </span>
   
 
@@ -194,7 +196,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1 分钟
+      25 分钟
     </span>
   
 
@@ -226,7 +228,37 @@
             <h1 style="display: none">Java SPI</h1>
             
             <div class="markdown-body">
-              <p>TODO</p>
+              <h1 id="Java-SPI-机制"><a href="#Java-SPI-机制" class="headerlink" title="Java SPI  机制"></a>Java SPI  机制</h1><h2 id="SPI-概述"><a href="#SPI-概述" class="headerlink" title="SPI  概述"></a>SPI  概述</h2><p> SPI全称是Service Provider Interface （服务提供接口），它是jdk6引入的一种服务发现机制。服务提供方通过实现服务方制定的SPI的接口来提供服务；SPI机制负责完成服务发现与注入的职责.     通俗来说就是 服务负责制定标准，服务提供者负责提供符合标准的具体实现.   </p>
+<p> 好处：<strong>spi以一种的插件的形式提供服务，极大的降低了系统的耦合性，增加系统灵活性和可扩展性</strong></p>
+<p>SPI中的角色</p>
+<ul>
+<li>服务方： 即调用方，负责定义标准的spi接口.</li>
+<li>服务提供方：实现标准spi接口的类的一方</li>
+<li>服务加载器 ：发现并加载在运行时环境中的服务提供者</li>
+</ul>
+<p>简单案例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//服务制定标准（即提供接口或抽象类）</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Animal</span> &#123;<br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">shout</span><span class="hljs-params">()</span>;<br>&#125;<br><br><span class="hljs-comment">//服务提供方1</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Animal</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">shout</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;wang&quot;</span>);<br>    &#125;<br>&#125;<br><span class="hljs-comment">//服务提供方2</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Cat</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Animal</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">shout</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;maio&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//约定 java官方制定的标准</span><br><span class="hljs-comment">//在classpath的根路径下新建 META-INFO/services 目录</span><br><span class="hljs-comment">//新建 全类名限定的服务接口类名文件  spi.demo.service.Animal</span><br><span class="hljs-comment">//在spi.demo.service.Animal中指定服务提供方：</span><br>      spi.demo.provider.Cat<br>      spi.demo.provider.Dog<br>          <br><span class="hljs-comment">//调用方</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span> &#123;<br>   <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> ClassNotFoundException, SQLException &#123;<br>        ServiceLoader&lt;Animal&gt; services= ServiceLoader.load(Animal.class);   <span class="hljs-comment">//服务加载器</span><br>        <span class="hljs-keyword">for</span> (Animal animal:services)&#123;<br>            animal.shout();   <span class="hljs-comment">//分别输出：maio   wang</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="原理及应用"><a href="#原理及应用" class="headerlink" title="原理及应用"></a>原理及应用</h2><p>​      <strong>SPI机制的原理 即利用服务加载器（类加载器）按照服务提供的标准（接口）加载指定位置的下service provider 提供的服务（标准接口实现类）并将其实例化的过程.</strong></p>
+<p>SPI机制在各大框架中应用广泛。如JDBC,Spring,Dubbo,Flink等.</p>
+<h3 id="举例一：JDBC"><a href="#举例一：JDBC" class="headerlink" title="举例一：JDBC"></a>举例一：JDBC</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//无SPI机制前JDBC写法</span><br>Class.forName(<span class="hljs-string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>);  <span class="hljs-comment">//加载驱动类，源码内部会通过静态代码块会自动注册驱动</span><br><span class="hljs-type">Connection</span> <span class="hljs-variable">conn</span> <span class="hljs-operator">=</span> DriverManager.getConnection(url, user, passWd);<br><span class="hljs-type">PreparedStatement</span> <span class="hljs-variable">statement</span> <span class="hljs-operator">=</span> conn.prepareStatement(sql)<br><span class="hljs-type">int</span> i= statement.executeUpdate();<br><span class="hljs-comment">//有spi机制后 spi自动发现服务并加载</span><br><span class="hljs-type">Connection</span> <span class="hljs-variable">conn</span> <span class="hljs-operator">=</span> DriverManager.getConnection(url, user, passWd); <span class="hljs-comment">//直接获取数据库连接（前提：已引入驱动jar包）</span><br></code></pre></td></tr></table></figure>
+
+<p>驱动jar结构：java.sql.Driver里的内容 ：com.mysql.cj.jdbc.Driver</p>
+<p><img src="http://oss.randallstevens.top/mysql_spi.png" srcset="/img/loading.gif" lazyload></p>
+<p>原理：源码简化版</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java">DriverManager &#123;<br>   <span class="hljs-comment">//静态代码块注册驱动</span><br>   <span class="hljs-keyword">static</span> &#123;<br>        loadInitialDrivers();  <br>        println(<span class="hljs-string">&quot;JDBC DriverManager initialized&quot;</span>);<br>    &#125;<br>    <br>   <span class="hljs-comment">//静态代码块调用的方法内部</span><br>   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">loadInitialDrivers</span><span class="hljs-params">()</span> &#123;<br>      AccessController.doPrivileged(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PrivilegedAction</span>&lt;Void&gt;() &#123;<br>            <span class="hljs-keyword">public</span> Void <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;  <span class="hljs-comment">//spi机制的体现</span><br>                ServiceLoader&lt;Driver&gt; loadedDrivers = ServiceLoader.load(Driver.class);<br>                Iterator&lt;Driver&gt; driversIterator = loadedDrivers.iterator();<br>             &#125;<br>   &#125;<br>&#125;                                   <br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="举例二：Dubbo"><a href="#举例二：Dubbo" class="headerlink" title="举例二：Dubbo"></a>举例二：Dubbo</h3><p>  dubbo的spi实现原理和java spi相似，只不过增强了一些功能和优化。java spi的是把所有的spi都加载到内存，dubbo可以实现按需加载，并且用到缓存技术，极大的提升性能.</p>
+<p>dubbo spi中的注解</p>
+<p>1、@SPI注解，被此注解标记的接口，就表示是一个可扩展的接口，并标注默认值。<br>2、@Adaptive注解，有两种注解方式：一种是注解在类上，一种是注解在方法上。<br>3、@Activate注解，此注解需要注解在类上或者方法上，并注明被激活的条件，以及所有的被激活实现类中的排序信息</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Factory</span> &#123;<br><br><br>    <span class="hljs-title class_">String</span> <span class="hljs-title function_">factoryIdentifier</span>();<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Returns a set of &#123;<span class="hljs-doctag">@link</span> ConfigOption&#125; that an implementation of this factory requires in</span><br><span class="hljs-comment">     * addition to &#123;<span class="hljs-doctag">@link</span> #optionalOptions()&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * &lt;p&gt;See the documentation of &#123;<span class="hljs-doctag">@link</span> Factory&#125; for more information.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-title class_">Set</span>&lt;<span class="hljs-title class_">ConfigOption</span>&lt;?&gt;&gt; requiredOptions();<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Returns a set of &#123;<span class="hljs-doctag">@link</span> ConfigOption&#125; that an implementation of this factory consumes in</span><br><span class="hljs-comment">     * addition to &#123;<span class="hljs-doctag">@link</span> #requiredOptions()&#125;.</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * &lt;p&gt;See the documentation of &#123;<span class="hljs-doctag">@link</span> Factory&#125; for more information.</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-title class_">Set</span>&lt;<span class="hljs-title class_">ConfigOption</span>&lt;?&gt;&gt; <span class="hljs-title function_">optionalOptions</span>();<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
 
             </div>
             <hr>
@@ -237,7 +269,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/SPI/">SPI</a>
+                      <a class="hover-with-bg" href="/tags/Java-SPI/">Java SPI</a>
                     
                   </div>
                 
