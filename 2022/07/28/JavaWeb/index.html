@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RandallStevens">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="JavaWebweb相关概念123456789101112131415161718web（World Wide Web）即全球广域网。它是一种基于HTTP的、全球性的、动态交互的、跨平台的分布式信息系统。Web 应用程序：可以提供给浏览器访问的程序。网页是web应用程序最重要的元素。  一个JavaWeb应用程序由多部分组成：  - html，css，js  - jsp，servlet  - ja">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Web">
+<meta property="og:url" content="https://randallstevens-chn.github.io/2022/07/28/JavaWeb/index.html">
+<meta property="og:site_name" content="RandallStevens">
+<meta property="og:description" content="JavaWebweb相关概念123456789101112131415161718web（World Wide Web）即全球广域网。它是一种基于HTTP的、全球性的、动态交互的、跨平台的分布式信息系统。Web 应用程序：可以提供给浏览器访问的程序。网页是web应用程序最重要的元素。  一个JavaWeb应用程序由多部分组成：  - html，css，js  - jsp，servlet  - ja">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-28T14:36:00.466Z">
+<meta property="article:modified_time" content="2022-08-21T05:39:58.217Z">
+<meta property="article:author" content="RandallStevens">
+<meta property="article:tag" content="JavaEE">
+<meta property="article:tag" content="JavaWeb">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Java Web - RandallStevens</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"randallstevens-chn.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":80,"cursorChar":" ♫","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 78vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>RandallStevens&#39;Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-books"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于我
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/post_page_img.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java Web">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-28 22:36" pubdate>
+        2022年7月28日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      52 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java Web</h1>
+            
+            <div class="markdown-body">
+              <h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><h2 id="web相关概念"><a href="#web相关概念" class="headerlink" title="web相关概念"></a>web相关概念</h2><figure class="highlight markdown"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><pre><code class="hljs markdown">web（World Wide Web）即全球广域网。它是一种基于HTTP的、全球性的、动态交互的、跨平台的分布式信息系统。<br><br>Web 应用程序：可以提供给浏览器访问的程序。网页是web应用程序最重要的元素。 <br> 一个JavaWeb应用程序由多部分组成：<br><span class="hljs-bullet">  -</span> html，css，js<br><span class="hljs-bullet">  -</span> jsp，servlet<br><span class="hljs-bullet">  -</span> java程序<br><span class="hljs-bullet">  -</span> 配置文件<br>  <br>资源分类<br><span class="hljs-bullet">	1.</span> 静态资源：所有用户访问后，得到的结果都是一样的，称为静态资源.静态资源可以直接被浏览器解析<br><span class="hljs-bullet">		*</span> 如： html,css,JavaScript<br><span class="hljs-bullet">	2.</span> 动态资源:每个用户访问，得到的结果可能不一样，称为动态资源。动态资源需要先转换为静态资源，再返回给浏览器<br><span class="hljs-bullet">		*</span> 如：servlet/jsp,php,asp....<br>  <br> Web服务器即存放Web应用程序的服务器（故又被称为web容器）<br>   职责：接收用户的请求，处理请求，做出响应。<br>   常见服务器：Netty,Tomcat,JBoss,Apache等。<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Http协议"><a href="#Http协议" class="headerlink" title="Http协议"></a>Http协议</h2><p>​       HTTP是一个请求-响应协议，运行于TCP层上，属于应用层协议。web中的资源是基于http协议在网络中传输的 ，是web都必须遵守的标准。</p>
+<p> 特点：无连接 （每次请求得到响应即断开链接 ,指http1.0），无状态（每一对请求响应之间独立，不共享信息）</p>
+<h3 id="发展历程"><a href="#发展历程" class="headerlink" title="发展历程"></a>发展历程</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">http1<span class="hljs-number">.0</span> :短链接<br>   浏览器和服务器每进行一次HTTP操作，就建立一次TCP连接，任务结束就中断连接。<br><br>http1<span class="hljs-number">.1</span> :长链接（客户端和服务器的HTTP头部的<span class="hljs-keyword">Connection</span>设置为keep-alive）<br>   多个HTTP请求可以复用同一个TCP连接，节省了TCP连接建立和断开的消耗。<br><br>http2<span class="hljs-number">.0</span> : 更安全，高效<br>   基于https(采用SSL加密)<br>   压缩头部（<span class="hljs-keyword">Header</span>）：多个请求，若<span class="hljs-keyword">header</span>是一样的,协议会帮你消除重复的部分。<br>   二进制格式：HTTP1<span class="hljs-number">.1</span>的解析是基于文本。HTTP2<span class="hljs-number">.0</span>的协议解析采用二进制格式，头信息和数据体都是二进制。<br>  <br></code></pre></td></tr></table></figure>
+
+<h3 id="协议格式"><a href="#协议格式" class="headerlink" title="协议格式"></a>协议格式</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs txt">http请求格式<br>   请求行： 请求方法  url   协议版本<br>   请求头： 若干个键值对组成（请求头属性 : 请求头属性值） <br>   请求空行： 一个空行（格式控制）<br>   请求体： 具体的请求数据（非必须，如get方式没有）<br>eg:<br>POST https://www.csdn.net/community/ HTTP/1.1   //此处为请求行<br>Host: www.csdn.net<br>Accept: application/json, text/javascript, */*; q=0.01<br>Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2<br>Connection: keep-alive<br>Cookie: uuid_tt_dd=10_18653979800-1652881261106-378096; <br>                                               //此处为请求空行<br>username=tom&amp;password=123                      //此处为请求体<br><br><br><br>http响应格式<br>    状态行： 协议版本  状态码 状态码解释<br>    响应头： 若干个 响应头属性 : 响应头属性值<br>    响应空行：一个空行（格式控制）<br>    响应体： 具体的响应数据<br>eg: <br>HTTP/1.1 200 OK                                //此处为状态行<br>Server: openresty<br>Date: Thu, 19 May 2022 10:27:12 GMT<br>Vary: Origin<br>Vary: Access-Control-Request-Method<br>                                            //此处为 响应空行                                    <br>&#123;&quot;code&quot;:200,&quot;msg&quot;:&quot;success&quot;,&quot;data&quot;:         //此处及后面响应体 <br>    &#123;&quot;nickName&quot;:&quot;IT自习小空ssssssss   间&quot;,&quot;avatar&quot;:&quot;https://profile.csdnimg.cn/f/7/2/3_jiangnb520&quot;,&quot;fansCount&quot;:79,&quot;likeCount&quot;:31,&quot;vip&quot;:2,&quot;followCount&quot;:35&#125;&#125; <br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="请求方式"><a href="#请求方式" class="headerlink" title="请求方式"></a>请求方式</h3><p>  有多种请求方式，此处仅列举几种。</p>
+<p>  Restful: 称之为REST风格（表述性状态传递）。  简单来说网络上的资源由唯一的url标识，通过请求方式不同来<strong>隐藏对资源的访问行为</strong>（非restful直接通过url来表现对资源的访问行为），使得url更简短。</p>
+<p>   /get  查询  ，/post  更新 ， /put  创建 ,  /delete  删除。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs txt">GET<br>向特定的资源发出查询请求。<br><br>POST<br>向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的建立和/或已有资源的修改。<br><br>PUT<br>向指定资源位置上传其最新内容<br><br>DELETE<br>请求服务器删除Request-URL所标识的资源<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="会话技术-域"><a href="#会话技术-域" class="headerlink" title="会话技术  /  域"></a>会话技术  /  域</h2><p>​      会话： 即浏览器和一个网站的所有请求响应的全过程称之为一次会话。</p>
+<p>​      作用：存储浏览器与服务器在请求和响应过程中产生的数据，解决数据共享问题    </p>
+<h3 id="Cookie："><a href="#Cookie：" class="headerlink" title="Cookie："></a>Cookie：</h3><p>  客户端会话技术：在一次会话的多次请求之间共享数据，将数据保存到客户端</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SetCookieServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>　  <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doPost</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse　response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;  <span class="hljs-comment">//创建cookie（还可以设置其lifecycle）</span><br>        <span class="hljs-type">Cookie</span> <span class="hljs-variable">cookie</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Cookie</span>(<span class="hljs-string">&quot;name&quot;</span>,<span class="hljs-string">&quot;jack&quot;</span>);<br>        response.addCookie(cookie);<br>    &#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GetCookieServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br>    <span class="hljs-meta">@Override</span>  <br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>        Cookie[] cookies = req.getCookies();  <span class="hljs-comment">//读取cookie</span><br>        <span class="hljs-keyword">if</span>(cookies !=<span class="hljs-literal">null</span> )&#123;<br>            <span class="hljs-keyword">for</span> (Cookie cookie : cookies) &#123;<br>                <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> cookie.getName();<br>                <span class="hljs-type">String</span> <span class="hljs-variable">value</span> <span class="hljs-operator">=</span> cookie.getValue();<br>                System.out.println(name + <span class="hljs-string">&quot;----&quot;</span> + value );<br>            &#125;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Session："><a href="#Session：" class="headerlink" title="Session："></a>Session：</h3><p>​      服务端会话技术：在一次会话的多次请求之间共享数据，将数据保存到服务器端</p>
+<p>​       Session是基于cookie实现的 ; </p>
+<p>​       Session是一个域对象,存储于服务器；</p>
+<p>​       Session作用范围：一次会话中经过的所有servlet。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SetSession</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>        <span class="hljs-comment">// JSessionID的共享</span><br>        <span class="hljs-type">HttpSession</span> <span class="hljs-variable">session</span> <span class="hljs-operator">=</span> req.getSession();<br>        session.setAttribute(<span class="hljs-string">&quot;name&quot;</span>,<span class="hljs-string">&quot;哈哈,呵呵&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GetSession</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>        <span class="hljs-type">HttpSession</span> <span class="hljs-variable">session</span> <span class="hljs-operator">=</span> req.getSession();<br>        <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> (String) session.getAttribute(<span class="hljs-string">&quot;name&quot;</span>);<br>        System.out.println(name);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Token"><a href="#Token" class="headerlink" title="Token:"></a>Token:</h3><p>   验证令牌，和session都可以用来验证身份</p>
+<p>​    相比session的优点：无需占服务器大量内存，以及分布式场景下的session保存问题。</p>
+<p>Token原理</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gauss">用户携带 userID passWd登录<br>验证成功 生成用户唯一标识符(比如uuid)，并参用hash算法加密唯一标识符。形成<span class="hljs-built_in">token</span>&#123;UUID,hashCode&#125;<br>返回<span class="hljs-built_in">token</span>给客户端<br>客户端携带<span class="hljs-built_in">token</span>再次访问<br>服务器争对 uuid取hash 验证携带的hashCode与携带的是否一致<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope:"></a>Scope:</h3><p> 域：由于http是无状态的，每对请求与响应之间独立，无法共享数据。所以通过设置域来实现共享数据。</p>
+<p> 四大域：</p>
+<table>
+<thead>
+<tr>
+<th align="center">作用域对象</th>
+<th>生命周期</th>
+<th align="center">作用范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">request</td>
+<td>用户发起的一次请求</td>
+<td align="center">一次请求经过的servlet</td>
+</tr>
+<tr>
+<td align="center">session</td>
+<td>浏览器与服务器的一次会话</td>
+<td align="center">会话中经过的所有servlet</td>
+</tr>
+<tr>
+<td align="center">pageContext</td>
+<td>jsp被创建</td>
+<td align="center">当前JSP页面</td>
+</tr>
+<tr>
+<td align="center">servletContext</td>
+<td>从服务器启动到服务器关闭</td>
+<td align="center">所有servlet都可以访问</td>
+</tr>
+</tbody></table>
+<p> 请求域： 一个请求会创建一个request对象，若一个请求中经历了多个Servlet，则多个Servlet就可以使用request来共享数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//请求域设置 request</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">setAttribute</span><span class="hljs-params">(String var1, Object var2)</span>;<br>Object <span class="hljs-title function_">getAttribute</span><span class="hljs-params">(String var1)</span>;<br><span class="hljs-keyword">void</span> <span class="hljs-title function_">removeAttribute</span><span class="hljs-params">(String var1)</span>;<br><br><span class="hljs-comment">//请求重定向： 是浏览器行为 算两次请求  地址栏变化，不共享request域</span><br>response.sendRedirect(<span class="hljs-string">&quot;http://localhost:8080/Servlet1&quot;</span>)<br><span class="hljs-comment">//请求转发：   是服务器行为 算一次请求  地址栏不变化，共享request域</span><br>request.getRequestDispatcher(<span class="hljs-string">&quot;/anotherServlet&quot;</span>).forward(request, response);<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="Servlet-JSP"><a href="#Servlet-JSP" class="headerlink" title="Servlet / JSP"></a>Servlet / JSP</h2><p>​    Servlet : 即 Server Applet  (服务器小程序)  ，用来处理服务器接收到的请求的程序。服务器自身只能处理静态的资源请求，当服务器收到动态资源请求后，须由servlet处理后形成静态资源，响应给请求。</p>
+<p>​     HttpServlet 即Web服务器端的小程序，由java官方基于http协议封装的一个Servlet。</p>
+<h3 id="HttpServlet的运行流程"><a href="#HttpServlet的运行流程" class="headerlink" title="HttpServlet的运行流程"></a>HttpServlet的运行流程</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs txt">浏览器发送一个 servlet 请求<br>服务器解析请求判断为Servlet请求 <br>服务器中生成请求对象(HttpServletRequest)和响应对象(HttpServletResponce)<br>服务器根据url找到目标ServletA,为其创建一个线程A<br>服务器将刚才创建的请求对象和响应对象传递给线程A<br>服务器创建servlet对象，然后调用该对象的service方法。<br>容器通过response获取处理结果，然后打包（响应数据包）发送给浏览器。<br>浏览器解析响应数据包，生成响应的页面<br></code></pre></td></tr></table></figure>
+
+<h3 id="servlet配置"><a href="#servlet配置" class="headerlink" title="servlet配置"></a>servlet配置</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java">基于配置文件<br>在JavaWeb项目的标准结构下<br>- java目录 （servlet和java代码）<br>- resource目录<br>- webapp目录 （web配置及jsp，html页面）<br>在webapp/WEB-INF目录下的web.xml中配置servlet信息<br>eg: <br>&lt;servlet&gt;<br>    &lt;servlet-name&gt;index&lt;/servlet-name&gt;<br>    &lt;servlet-class&gt;cookie.GetCookieServlet&lt;/servlet-class&gt;<br>&lt;/servlet&gt;<br>&lt;servlet-mapping&gt;<br>    &lt;servlet-name&gt;index&lt;/servlet-name&gt;<br>    &lt;url-pattern&gt;/home&lt;/url-pattern&gt;<br>&lt;/servlet-mapping&gt;<br>        <br>基于注解<br><span class="hljs-meta">@WebServlet(name = &quot;index&quot;, value = &quot;/login&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SetCookieServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br>   ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h3><p>​     Java Servlet Page  一个支持写java代码的页面.本质上还是一个Servlet.</p>
+<p>语法格式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java">指令标识: 设定整个JSP页面的相关信息，被服务器解释并执行的，不产生任何输出到网页中的内容（通常声明于页面顶部）<br>&lt;*%@ 指令类型 属性<span class="hljs-number">1</span>=“属性值<span class="hljs-number">1</span>” 属性<span class="hljs-number">2</span>=“属性值<span class="hljs-number">2</span>”%&gt;<br>eg: &lt;%@ include file=<span class="hljs-string">&quot;path&quot;</span>%&gt;     <span class="hljs-comment">//include指令用于引入公共页面</span><br>    &lt;%@ page  errorPage=<span class="hljs-string">&quot;./404.jsp&quot;</span> session=<span class="hljs-string">&quot;true&quot;</span>...%&gt;  <span class="hljs-comment">//page指令 设置页面java相关属性</span><br>    &lt;%@ taglib prefix=<span class="hljs-string">&quot;tagPrefix&quot;</span> uri=<span class="hljs-string">&quot;tagURI&quot;</span>%&gt;   <span class="hljs-comment">//标签库指令</span><br><br>脚本标识：书写java代码的地方 表达式的运行结果会以字符串形式输出在页面上<br>&lt;% = 表达式%&gt;<br>&lt;%! 声明变量或方法的代码 %&gt;<br>eg:<br>&lt;%!<br>    <span class="hljs-type">String</span> <span class="hljs-variable">tip</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;add()的结果是: &quot;</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-title function_">add</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> &#123;<br>        <span class="hljs-keyword">return</span> a + b;<br>    &#125;<br>%&gt;<br><span class="hljs-comment">//表达式输出只能有一条</span><br>&lt;%=<br>tip + add(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>)<br>%&gt;<br>&lt;img src=<span class="hljs-string">&quot;images/&lt;%url %&gt;&quot;</span>&gt; <span class="hljs-comment">//html页面也可以调用jsp声明的变量</span><br><br>&lt;%-- 注释内容 --%&gt;<br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/JavaEE/">JavaEE</a>
+                    
+                      <a class="hover-with-bg" href="/tags/JavaWeb/">JavaWeb</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/16/Java%20SPI/">
+                        <span class="hidden-mobile">Java SPI</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+    
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"left","width":300,"height":600},"mobile":{"show":true,"scale":0.5},"rect":"opacity:1","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

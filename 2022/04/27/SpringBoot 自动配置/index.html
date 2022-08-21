@@ -16,12 +16,12 @@
   <meta name="author" content="RandallStevens">
   <meta name="keywords" content="">
   
-    <meta name="description" content="SpringBoot 自动配置自动配置：基于引入的jar包，根据自动配置类,将引入的类注册进ioc容器. 配置类的定义：  广义  ：被@Component直接或间接修饰的类，包括@Configuration,@Bean (即注册进容器的所有组件类) 狭义  ：被 @Configuration修饰的类  首先 自动配置的前提是导入配置（配置本身也是一个bean） SpringBoot启动流程：​">
+    <meta name="description" content="SpringBoot 自动配置自动配置：基于引入的jar包，根据自动配置类,将引入的类注册进ioc容器. 配置类的定义：  广义  ：被@Component直接或间接修饰的类，包括@Configuration,@Bean (即注册进容器的所有组件类) 狭义  ：被 @Configuration修饰的类  首先 自动配置的前提是导入配置类（配置类本身也是一个bean） SpringBoot启动流程：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot 自动配置原理">
 <meta property="og:url" content="https://randallstevens-chn.github.io/2022/04/27/SpringBoot%20%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="RandallStevens">
-<meta property="og:description" content="SpringBoot 自动配置自动配置：基于引入的jar包，根据自动配置类,将引入的类注册进ioc容器. 配置类的定义：  广义  ：被@Component直接或间接修饰的类，包括@Configuration,@Bean (即注册进容器的所有组件类) 狭义  ：被 @Configuration修饰的类  首先 自动配置的前提是导入配置（配置本身也是一个bean） SpringBoot启动流程：​">
+<meta property="og:description" content="SpringBoot 自动配置自动配置：基于引入的jar包，根据自动配置类,将引入的类注册进ioc容器. 配置类的定义：  广义  ：被@Component直接或间接修饰的类，包括@Configuration,@Bean (即注册进容器的所有组件类) 狭义  ：被 @Configuration修饰的类  首先 自动配置的前提是导入配置类（配置类本身也是一个bean） SpringBoot启动流程：">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://oss.randallstevens.top/springboot_%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B_%E4%BB%A3%E7%A0%81.png">
 <meta property="og:image" content="http://oss.randallstevens.top/springboot_%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://oss.randallstevens.top/springboot_Conditional.png">
 <meta property="og:image" content="http://oss.randallstevens.top/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%85%A8%E6%B5%81%E7%A8%8B.png">
 <meta property="article:published_time" content="2022-04-26T18:32:49.276Z">
-<meta property="article:modified_time" content="2022-05-16T18:00:42.355Z">
+<meta property="article:modified_time" content="2022-08-21T06:02:49.748Z">
 <meta property="article:author" content="RandallStevens">
 <meta property="article:tag" content="JavaEE">
 <meta property="article:tag" content="SpringBoot">
@@ -194,7 +194,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.1k 字
+      5.2k 字
     </span>
   
 
@@ -203,7 +203,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      43 分钟
+      44 分钟
     </span>
   
 
@@ -241,7 +241,7 @@
 <li>广义  ：被@Component直接或间接修饰的类，包括@Configuration,@Bean (即注册进容器的所有组件类)</li>
 <li>狭义  ：被 @Configuration修饰的类</li>
 </ul>
-<p>首先 自动配置的前提是导入配置（配置本身也是一个bean）</p>
+<p>首先 自动配置的前提是导入配置类（配置类本身也是一个bean）</p>
 <h2 id="SpringBoot启动流程："><a href="#SpringBoot启动流程：" class="headerlink" title="SpringBoot启动流程："></a>SpringBoot启动流程：</h2><p>​            SpringBoot实际启动流程非常的复杂，此处为简化后步骤代码版：</p>
 <p><img src="http://oss.randallstevens.top/springboot_%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B_%E4%BB%A3%E7%A0%81.png" srcset="/img/loading.gif" lazyload alt="启动流程_代码"></p>
 <p>​             启动流程图</p>
@@ -260,7 +260,7 @@
 <p><strong>@Import导入形式二</strong> ：Springboot底层就通过这种方式加载自带的配置类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Tiger</span> &#123;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ZooConfig</span> &#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> Tiger <span class="hljs-title function_">tiger</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span>  <span class="hljs-keyword">new</span> <span class="hljs-title class_">Tiger</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ZooImportSelector</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ImportSelector</span>&#123;   <span class="hljs-comment">//  实现ImportSelector重写selectImports()</span><br><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> String[] selectImports(AnnotationMetadata importingClassMetadata) &#123;<br>    <span class="hljs-keyword">return</span>  <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>[]&#123;<span class="hljs-string">&quot;com.xxx.ZooConfig&quot;</span>&#125;;  <span class="hljs-comment">//会将配置类自身及其内部@Bean的组件都注册进IOC容器</span><br>&#125;<br>&#125;<br><br><span class="hljs-comment">//导入方式和导入普通类形式一致： @Import(&#123;ZooImportSelector&#125;)</span><br></code></pre></td></tr></table></figure>
 
-<p>@Import导入形式三：</p>
+<p>@Import导入形式三：第三方stater导入自带组件时可以用这种方式（如mybtis导入带@mapper注解的代理对象）</p>
 <p>官方该方法的实现：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ZooRegister</span>  <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ImportBeanDefinitionRegistrar</span> &#123;  <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">registerBeanDefinitions</span><span class="hljs-params">(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry)</span>      &#123;<br>        <span class="hljs-type">GenericBeanDefinition</span> <span class="hljs-variable">dogDefinition</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GenericBeanDefinition</span>();  <span class="hljs-comment">//创建泛型bean定义</span><br>        dogDefinition.setBeanClass(Tiger.class);    <span class="hljs-comment">//填充类进bean定义</span><br>        registry.registerBeanDefinition(<span class="hljs-string">&quot;dog&quot;</span>,dogDefinition); <span class="hljs-comment">//注册bean</span><br>    &#125;<br>&#125;<br><span class="hljs-comment">//导入方式和导入普通类形式一致： @Import(&#123;ZooRegister&#125;)</span><br></code></pre></td></tr></table></figure>
 
