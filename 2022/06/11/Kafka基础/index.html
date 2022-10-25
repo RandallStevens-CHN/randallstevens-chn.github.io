@@ -1,0 +1,523 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RandallStevens">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Kafka基础概述Kafka是一个分布式的消息发布订阅系统 Kafka   Broker 端使用 Zookeeper 注册 broker 信息后，选取一个leader broker 监控 Partition leader 存活性；Kafka Producer 端直接连接 broker.list 列表。Comsumer 端则使用 Zookeeper 注册 comsumer 信息，同时用来发现 bro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka基础">
+<meta property="og:url" content="https://randallstevens-chn.github.io/2022/06/11/Kafka%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="RandallStevens">
+<meta property="og:description" content="Kafka基础概述Kafka是一个分布式的消息发布订阅系统 Kafka   Broker 端使用 Zookeeper 注册 broker 信息后，选取一个leader broker 监控 Partition leader 存活性；Kafka Producer 端直接连接 broker.list 列表。Comsumer 端则使用 Zookeeper 注册 comsumer 信息，同时用来发现 bro">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://oss.randallstevens.top/kafka1.jpg">
+<meta property="og:image" content="http://oss.randallstevens.top/kafka2.jpg">
+<meta property="article:published_time" content="2022-06-11T13:11:01.836Z">
+<meta property="article:modified_time" content="2022-10-25T02:52:03.908Z">
+<meta property="article:author" content="RandallStevens">
+<meta property="article:tag" content="MQ">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://oss.randallstevens.top/kafka1.jpg">
+  
+  
+  <title>Kafka基础 - RandallStevens</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"randallstevens-chn.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":80,"cursorChar":" ♫","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 78vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>RandallStevens&#39;Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-books"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于我
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/post_page_img.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Kafka基础">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-06-11 21:11" pubdate>
+        2022年6月11日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      33 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Kafka基础</h1>
+            
+            <div class="markdown-body">
+              <h1 id="Kafka基础"><a href="#Kafka基础" class="headerlink" title="Kafka基础"></a>Kafka基础</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Kafka是一个分布式的消息发布订阅系统</p>
+<p>Kafka   Broker 端使用 Zookeeper 注册 broker 信息后，选取一个leader broker 监控 Partition leader 存活性；Kafka Producer 端直接连接 broker.list 列表。Comsumer 端则使用 Zookeeper 注册 comsumer 信息，同时用来发现 broker 列表，并和 Partition leader 建立 socket 连接获取消息。</p>
+<ul>
+<li>Topic（主题）<ul>
+<li>Kafka 中可将消息分类，每一类的消息称为一个 Topic，消费者可以对不同的 Topic 进行不同的处理。一个topic会被分为若干个partition，每个partition物理上对应一个文件夹   当新消息来时只与partitionLeader 交互，其他分区副本follower从分区副本leader中同步</li>
+</ul>
+</li>
+<li>Broker（代理）<ul>
+<li>每个 Broker 即一个 Kafka 服务实例， 多个 broker 构成一个 Kafka 集群，生产者发布的消息将保存在 Broker 中，消费者将从 Broker 中拉取消息进行消费。</li>
+<li>Broker集群中，会有一个leader（controller leader），负责管理整个集群中分区和副本的状态和选举partition leader</li>
+</ul>
+</li>
+<li>Producer（生产者）<ul>
+<li>负责生产消息并发送给 Broker 。属于客户端</li>
+</ul>
+</li>
+<li>Consumer（生产者）<ul>
+<li>负责消费 Broker 中 Topic 消息，每个 Consumer 实例归属于一个 Consumer Group. 属于客户端</li>
+</ul>
+</li>
+<li>Partition（分区）<ul>
+<li>Partition 是 Kafka 中比较特色的部分，一个 Topic 可以分为多个 Partition，每个 Partition 是一个有序的队列，Partition 中的每条消息都存在一个有序的偏移量（Offest） ，同一个 Consumer Group 中，只有一个 Consumer 实例可消费某个 Partition 的消息。</li>
+<li>partion可以看作一个有序的队列，里面的数据是储存在硬盘中的，追加式的。partition的作用就是提供分布式的扩展，一个topic可以有许多partions，多个partition可以并行处理数据，所以可以处理相当量的数据。只有partition的leader才会进行读写操作，folower仅进行复制，客户端是感知不到的。</li>
+</ul>
+</li>
+<li>ISR<ul>
+<li>lSR指的是能够和leader保持同步的follower+leader本身组成的集合  即所有副本的列表. 副本follower broker会自动同步lead的分区数据，副本leader写入数据后并不会commit，只有ISR列表中的所有folower同步之后才会commit，滞后的follower移除ISR来避免写消息延迟。设置ISR主要是为了broker宕掉之后，重新选举partition的leader从ISR列表中选择。 即每个broker上的分区数据相同</li>
+</ul>
+</li>
+<li>HW<ul>
+<li>high watermark(高水位)，指代的是已提交消息末尾（即可被消费消息的末尾）。消息进入kafka后当所有节点的已经完成同步后的位置被称为HW, 所有进入的消息的末尾称为Log end offset.</li>
+</ul>
+</li>
+</ul>
+<p> Broker 泛指kafka的服务端  通常是一个或多个物理机器，broker通常指kafka服务端一个节点。Producer和Consumer属于客户端</p>
+<p>broker-list是老版的指代集群服务端地址的，bootstrap.servers是新版的。（由于兼容性问题有的地方并没有替换该命令）</p>
+<p>另外指定kafka集群时只需填写一个  broker地址，kafka会自动寻找其他broker</p>
+<h2 id="2种leader"><a href="#2种leader" class="headerlink" title="2种leader"></a>2种leader</h2><p>kafka集群中有2个种leader，一种是broker leader即controller leader，还有一种就是partition的leader，2种leader的选举大致流程</p>
+<h3 id="Controller-leader（集群leader）"><a href="#Controller-leader（集群leader）" class="headerlink" title="Controller leader（集群leader）"></a>Controller leader（集群leader）</h3><p>当broker启动的时候，都会创建KafkaController对象，每个节点上的KafkaController会在指定的zookeeper路径下创建临时节点，第一个成功创建的节点的KafkaController才可以成为leader，其余的都是follower。当leader故障后，所有的follower会收到通知，再次竞争在该路径下创建节点从而选举新的leader</p>
+<p>  所有brokers选举出一个leader controller  .  <strong>只有 leader broker在监听zk,其他broker只需与leader broker通信.</strong></p>
+<h3 id="Partition-leader（分区副本leader）"><a href="#Partition-leader（分区副本leader）" class="headerlink" title="Partition leader（分区副本leader）"></a>Partition leader（分区副本leader）</h3><p> 由controller leader执行</p>
+<div class="code-wrapper"><pre><code class="hljs"> 1. 从Zookeeper中读取当前分区的所有ISR集合
+ 2. 调用配置的分区算法选择分区的leader （有多种算法）
+ 3. 监听 Partition leader 存活状态
+ 4. follower节点复制分区leader的副本
+</code></pre></div>
+<p>  举例：有3个broker   设置分区数为3  副本数为3       </p>
+<p>​     则共有9个分区副本    假定 broker1当选 leader,    经过选举 </p>
+<p>​           分区1的leader副本在broker1</p>
+<p>​           分区2的leader副本在broker2</p>
+<p>​           分区3的leader副本在broker3</p>
+<p>​    当消息写入分区1 ，broker2,3会从broker1上同步分区1</p>
+<p>​    当消息写入分区2  , broker1,3会从broker2上同步分区2</p>
+<p>​     ……</p>
+<p><strong>不同分区的leader 可以在一个broker上也可以不在（默认分区leader都在broker leader上），主要取决于分区选举算法</strong></p>
+<p><strong>出于高可用的考虑，kafka默认会确保分区的每个副本被放在不同的broker上</strong></p>
+<h2 id="生产消费流程"><a href="#生产消费流程" class="headerlink" title="生产消费流程"></a>生产消费流程</h2><h3 id="producer-的写入流程"><a href="#producer-的写入流程" class="headerlink" title="producer 的写入流程"></a>producer 的写入流程</h3><ol>
+<li>producer 先从 zookeeper 的 “/brokers/…/state” 节点找到该 partition 的 leader </li>
+<li>producer 将消息发送给该partition  leader </li>
+<li>leader 将消息写入本地 log </li>
+<li>followers 从 leader pull 消息，写入本地 log 后 leader 发送 ACK 确认</li>
+<li>leader 收到所有 ISR 中的 broker 的 ACK 后，增加 HW（high watermark，已经 commit 消息的 offset） 并向 producer 发送 ACK</li>
+</ol>
+<h3 id="consumer消费流程"><a href="#consumer消费流程" class="headerlink" title="consumer消费流程"></a>consumer消费流程</h3><p>​     kafka采用pull模式进行消费消息，上次消费的offset保存于zk.</p>
+<p>注意：<br> 1、如果消费线程大于 Patition 数量，则有些线程将收不到消息。<br> 2、如果 Patition 数量大于消费线程数，则有些线程多收到多个 Patition 的消息。<br> 3、如果一个线程消费多个 Patition，则无法保证你收到的消息的顺序，而一个 Patition 内的消息是有序的。</p>
+<h2 id="ZK在Kafka中的作用"><a href="#ZK在Kafka中的作用" class="headerlink" title="ZK在Kafka中的作用"></a>ZK在Kafka中的作用</h2><h3 id="1、Broker注册"><a href="#1、Broker注册" class="headerlink" title="1、Broker注册"></a>1、Broker注册</h3><p><strong>Broker是分布式部署并且相互之间相互独立，但是需要有一个注册系统能够将整个集群中的Broker管理起来</strong>，此时就使用到了Zookeeper。在Zookeeper上会有一个专门<strong>用来进行Broker服务器列表记录</strong>的节点：</p>
+<p>/brokers/ids</p>
+<p>每个Broker在启动时，都会到Zookeeper上进行注册，即到/brokers/ids下创建属于自己的节点，如/brokers/ids/[0…N]。</p>
+<h3 id="2、Topic注册"><a href="#2、Topic注册" class="headerlink" title="2、Topic注册"></a>2、Topic注册</h3><p>在Kafka中，同一个<strong>Topic的消息会被分成多个分区</strong>并将其分布在多个Broker上，<strong>这些分区信息及与Broker的对应关系</strong>也都是由Zookeeper在维护，由专门的节点来记录，如：</p>
+<p>/borkers/topics</p>
+<h3 id="3、记录消息-消费进度Offset-记录"><a href="#3、记录消息-消费进度Offset-记录" class="headerlink" title="3、记录消息 消费进度Offset 记录"></a>3、记录消息 消费进度Offset 记录</h3><p>0.8及以前在消费者对指定消息分区进行消息消费的过程中，<strong>需要定时地将分区消息的消费进度Offset记录到Zookeeper上</strong></p>
+<p>/consumers/[group_id]/offsets/[topic]/[broker_id-partition_id]</p>
+<h3 id="4、分区-与-消费者-的关系"><a href="#4、分区-与-消费者-的关系" class="headerlink" title="4、分区 与 消费者 的关系"></a>4、分区 与 消费者 的关系</h3><p>在Kafka中，规定了<strong>每个消息分区 只能被同组的一个消费者进行消费</strong>，因此，需要在 Zookeeper 上记录 消息分区 与 Consumer 之间的关系，每个消费者一旦确定了对一个消息分区的消费权力，需要将其Consumer ID 写入到 Zookeeper 对应消息分区的临时节点上，例如：</p>
+<p>/consumers/[group_id]/owners/[topic]/[broker_id-partition_id]</p>
+<p>其中，[broker_id-partition_id]就是一个 消息分区 的标识，节点内容就是该 消息分区 上 消费者的Consumer ID。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="版本变化"><a href="#版本变化" class="headerlink" title="版本变化"></a>版本变化</h3><p>shell写 消费者命令的变化 </p>
+<p>0.8及以前</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs shell">.\bin\kafka-console-consumer.bat --zookeeper localhost:2181 --topic test<br></code></pre></td></tr></table></figure>
+
+<p>以后</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">.\bin\\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test<br></code></pre></td></tr></table></figure>
+
+<p>原因</p>
+<p>0.8以前的kafka，消费的进度(offset)是写在zk中的，所以consumer需要知道zk的地址。后来的版本都由broker管理，所以就用bootstrap-server了。</p>
+<p>新版的 Kafka 使用一个选举出来的 controller 来监听 zookeeper，其他 node 再去和 controller 通信，减少 zookeeper 的压力。</p>
+<p><img src="http://oss.randallstevens.top/kafka1.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="http://oss.randallstevens.top/kafka2.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><p>监控工具，可视化工具 。如offsetexplorer，雅虎的Kafka Manager，Kafka Web Console</p>
+<p>​       </p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/MQ/">MQ</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Kafka/">Kafka</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/23/TODO/TODO/DAO%E6%A8%A1%E5%BC%8F/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/31/TODO/TODO/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+    
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"left","width":300,"height":600},"mobile":{"show":true,"scale":0.5},"rect":{"opacity":1},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

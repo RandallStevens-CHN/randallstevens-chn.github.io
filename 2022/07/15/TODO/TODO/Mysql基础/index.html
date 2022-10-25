@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RandallStevens">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Mysql基础数据库语言分类    语言 描述    DDL (数据定义语言) 对数据库&#x2F;表的创建，修改，删除。  对应的关键字：create,alter,drop   DML (数据操纵语言） 对表中的数据的增删改. 对应的关键字 insert,update,delete   DQL (数据查询语言） 对表中的数据的查. 对应的关键字   select   DCL (数据控制语言) 对用户访问数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RandallStevens">
+<meta property="og:url" content="https://randallstevens-chn.github.io/2022/07/15/TODO/TODO/Mysql%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="RandallStevens">
+<meta property="og:description" content="Mysql基础数据库语言分类    语言 描述    DDL (数据定义语言) 对数据库&#x2F;表的创建，修改，删除。  对应的关键字：create,alter,drop   DML (数据操纵语言） 对表中的数据的增删改. 对应的关键字 insert,update,delete   DQL (数据查询语言） 对表中的数据的查. 对应的关键字   select   DCL (数据控制语言) 对用户访问数">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-15T03:26:16.589Z">
+<meta property="article:modified_time" content="2022-10-09T13:12:47.858Z">
+<meta property="article:author" content="RandallStevens">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>RandallStevens</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"randallstevens-chn.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":80,"cursorChar":" ♫","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 78vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>RandallStevens&#39;Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-books"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于我
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/post_page_img.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-15 11:26" pubdate>
+        2022年7月15日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      26 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            <div class="markdown-body">
+              <h1 id="Mysql基础"><a href="#Mysql基础" class="headerlink" title="Mysql基础"></a>Mysql基础</h1><p>数据库语言分类</p>
+<table>
+<thead>
+<tr>
+<th align="center">语言</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">DDL (数据定义语言)</td>
+<td align="center">对数据库/表的创建，修改，删除。  对应的关键字：create,alter,drop</td>
+</tr>
+<tr>
+<td align="center">DML (数据操纵语言）</td>
+<td align="center">对表中的数据的增删改. 对应的关键字 insert,update,delete</td>
+</tr>
+<tr>
+<td align="center">DQL (数据查询语言）</td>
+<td align="center">对表中的数据的查. 对应的关键字   select</td>
+</tr>
+<tr>
+<td align="center">DCL (数据控制语言)</td>
+<td align="center">对用户访问数据库数据的权限控制</td>
+</tr>
+<tr>
+<td align="center">TCL (事务处理语言)</td>
+<td align="center">事务处理语言 commit  ,rollback</td>
+</tr>
+</tbody></table>
+<p>我们常说的CRUD（增删改查） 即Create,Read,Update,Delete指的是 DML+DQL</p>
+<p>CRUD对应的数据库关键字insert,select,update,delete.</p>
+<h2 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h2><h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><figure class="highlight sql"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></div></td><td class="code"><pre><code class="hljs sql"># 创建数据库<br><span class="hljs-keyword">create</span> database student <br><span class="hljs-keyword">default</span> <span class="hljs-type">character</span> <span class="hljs-keyword">set</span> utf8 ;<br><br>#创建表<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span>   if <span class="hljs-keyword">no</span> exist (<br>columnName  datatype  (<span class="hljs-keyword">null</span> <span class="hljs-operator">/</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span>)  (<span class="hljs-keyword">default</span>  <span class="hljs-keyword">value</span>)  (auto_increment)  (comment  ‘列注释’),<br>......<br><span class="hljs-keyword">primary</span> key (字段名)  # 指定主键<br>)<br>eg:<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> `<span class="hljs-keyword">user</span>` (<br>  `user_id` <span class="hljs-type">int</span>(<span class="hljs-number">10</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> AUTO_INCREMENT,<br>  `user_name` <span class="hljs-type">varchar</span>(<span class="hljs-number">25</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8 <span class="hljs-keyword">COLLATE</span> utf8_bin <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;用户名&#x27;</span>,<br>  `user_nickname` <span class="hljs-type">varchar</span>(<span class="hljs-number">50</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;昵称&#x27;</span>,<br>  `user_password` <span class="hljs-type">varchar</span>(<span class="hljs-number">50</span>) <span class="hljs-type">CHARACTER</span> <span class="hljs-keyword">SET</span> utf8 <span class="hljs-keyword">COLLATE</span> utf8_bin <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;密码&#x27;</span>,<br>  `user_realname` <span class="hljs-type">varchar</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;姓名&#x27;</span>,<br>  `user_gender` tinyint(<span class="hljs-number">1</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> COMMENT <span class="hljs-string">&#x27;性别&#x27;</span>,<br>  `del_flag` tinyint(<span class="hljs-number">1</span>) <span class="hljs-keyword">DEFAULT</span> <span class="hljs-string">&#x27;0&#x27;</span> COMMENT <span class="hljs-string">&#x27;删除标识(1删除 0未删除）&#x27;</span>,<br>  <span class="hljs-keyword">PRIMARY</span> KEY (`user_id`) <span class="hljs-keyword">USING</span> BTREE,<br>  <span class="hljs-keyword">UNIQUE</span> KEY `un_user_name` (`user_name`) <span class="hljs-keyword">USING</span> BTREE,<br>  KEY `user_address` (`user_address`) <span class="hljs-keyword">USING</span> BTREE,<br>  <span class="hljs-keyword">CONSTRAINT</span> `user_ibfk_1` <span class="hljs-keyword">FOREIGN</span> KEY (`user_address`) <span class="hljs-keyword">REFERENCES</span> `address` (`address_areaId`),<br>) ENGINE<span class="hljs-operator">=</span>InnoDB AUTO_INCREMENT<span class="hljs-operator">=</span><span class="hljs-number">22</span> <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8 ROW_FORMAT<span class="hljs-operator">=</span><span class="hljs-keyword">DYNAMIC</span> COMMENT<span class="hljs-operator">=</span><span class="hljs-string">&#x27;用户表&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Alter"><a href="#Alter" class="headerlink" title="Alter"></a>Alter</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs sql">#修改数据库<br><span class="hljs-keyword">alter</span> database school  <span class="hljs-keyword">default</span> <span class="hljs-type">character</span> <span class="hljs-keyword">set</span> gbk;<br><br>#修改表<br> #<span class="hljs-number">1.</span>增加<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> student <span class="hljs-keyword">add</span> <span class="hljs-keyword">column</span> id <span class="hljs-keyword">first</span>;<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> studnet <span class="hljs-keyword">add</span> <span class="hljs-keyword">column</span> uuid after id;<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> studnet <span class="hljs-keyword">add</span> <span class="hljs-keyword">primary</span> key(columnName)  # 增加主键（还可以加其他约束）<br> #<span class="hljs-number">2.</span>修改列<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> <span class="hljs-keyword">user</span> modify uuid <span class="hljs-type">bigint</span> #修改uuid列数据类型为<span class="hljs-type">bigint</span><br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> <span class="hljs-keyword">user</span> change id user_id tinyint; #修改列名和数据类型<br> #<span class="hljs-number">3.</span>删除<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">drop</span> <span class="hljs-keyword">primary</span> key; #删除主键（也可删除其他约束）<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">drop</span> <span class="hljs-keyword">column</span> sex;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Drop"><a href="#Drop" class="headerlink" title="Drop"></a>Drop</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql">#删除数据库<br><span class="hljs-keyword">drop</span> database <span class="hljs-keyword">user</span>;<br><span class="hljs-keyword">drop</span> <span class="hljs-keyword">table</span> school;<br>#清空表中数据<br><span class="hljs-keyword">truncate</span> <span class="hljs-keyword">table</span> <span class="hljs-keyword">user</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h2><h3 id="insert"><a href="#insert" class="headerlink" title="insert"></a>insert</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql">#全字段插入<br><span class="hljs-keyword">insert</span>  <span class="hljs-keyword">into</span>  tablename  <span class="hljs-keyword">values</span>（value1,value2，。。。）;<br><span class="hljs-keyword">insert</span>  <span class="hljs-keyword">into</span>  tablename  <span class="hljs-keyword">values</span>（value1,value2，。。。）,...,（value1,value2，。。。）; #多条<br>#部分字段插入<br><span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> tablename (字段<span class="hljs-number">1</span>，字段<span class="hljs-number">3</span>) <span class="hljs-keyword">values</span>(value1,value3)<br><span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> tablename (字段<span class="hljs-number">1</span>，字段<span class="hljs-number">3</span>) <span class="hljs-keyword">values</span>(value1,value3)，(value1,value3)；#多条<br>#数据导入<br>load data  infile  “C:\\path\\stu.txt”  <span class="hljs-keyword">into</span> <span class="hljs-keyword">table</span> student;<br></code></pre></td></tr></table></figure>
+
+<h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">update</span> 表名 <span class="hljs-keyword">set</span> 字段<span class="hljs-number">1</span><span class="hljs-operator">=</span>新值<span class="hljs-number">1</span>, 字段<span class="hljs-number">2</span><span class="hljs-operator">=</span>新值<span class="hljs-number">2</span>, 字段<span class="hljs-number">3</span><span class="hljs-operator">=</span>新值<span class="hljs-number">3</span>, ... <span class="hljs-keyword">where</span> 条件 <br></code></pre></td></tr></table></figure>
+
+<h3 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">delete</span>  <span class="hljs-keyword">from</span>  student  <span class="hljs-keyword">where</span> score<span class="hljs-operator">&lt;</span><span class="hljs-number">90</span><br><span class="hljs-keyword">delete</span>  <span class="hljs-keyword">from</span>  <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> id<span class="hljs-operator">=</span><span class="hljs-number">123</span>;<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="DQL"><a href="#DQL" class="headerlink" title="DQL"></a>DQL</h2><p>   select  * from   tablename   （ 限定条件）#全字段查询（不推荐）</p>
+<p>   select   stu_name  from stundent  where  stu_age&gt;18  # 部分字段查询</p>
+<h3 id="查询条件"><a href="#查询条件" class="headerlink" title="查询条件"></a>查询条件</h3><p>​    where用来过滤查询结果</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs sql">#基础限定条件<br><br># <span class="hljs-keyword">in</span> <span class="hljs-operator">/</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span>  判断某个列的值是否在<span class="hljs-operator">/</span>不在指定集合<br><span class="hljs-keyword">select</span> id,score <span class="hljs-keyword">from</span> student <span class="hljs-keyword">where</span> name <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> (<span class="hljs-string">&#x27;zs&#x27;</span>,<span class="hljs-string">&#x27;ls&#x27;</span>);<br><br># <span class="hljs-keyword">between</span> ... <span class="hljs-keyword">and</span> ... 判断某列值是否在指定范围<br><span class="hljs-keyword">select</span> name <span class="hljs-keyword">from</span> student <span class="hljs-keyword">where</span> scoce <span class="hljs-keyword">between</span> <span class="hljs-number">60</span> <span class="hljs-keyword">and</span> <span class="hljs-number">100</span>;<br><br># <span class="hljs-keyword">like</span> 关键字匹配  <span class="hljs-operator">%</span>匹配多个字符  _匹配单个字符<br><span class="hljs-keyword">select</span> name <span class="hljs-keyword">like</span> &quot;%以%&quot; # 匹配名字中包含“以”的人<br><span class="hljs-keyword">select</span> name <span class="hljs-keyword">like</span> &quot;李%&quot; # 匹配姓“李”的人<br><br># <span class="hljs-keyword">is</span> <span class="hljs-keyword">null</span> <span class="hljs-operator">/</span><span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> 判断某个字段值为空<span class="hljs-operator">/</span>不为空<br><br># <span class="hljs-keyword">and</span> <span class="hljs-operator">/</span> <span class="hljs-keyword">or</span>  多条件查询<br><span class="hljs-keyword">select</span> name <span class="hljs-keyword">from</span> stuent <span class="hljs-keyword">where</span> sex<span class="hljs-operator">=</span>&quot;女&quot; <span class="hljs-keyword">and</span> (socre<span class="hljs-operator">&gt;</span><span class="hljs-number">90</span> <span class="hljs-keyword">or</span> job<span class="hljs-operator">=</span>&quot;班长&quot;)<br></code></pre></td></tr></table></figure>
+
+<p>​    其他限定条件</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql"># <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span>  对查询结果排序  <span class="hljs-keyword">asc</span>（升序）<span class="hljs-operator">/</span><span class="hljs-keyword">DESC</span>（降序）  默认升序,可不写关键字<span class="hljs-keyword">asc</span><br><span class="hljs-keyword">select</span> name <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> score <span class="hljs-keyword">desc</span> ,id <span class="hljs-keyword">asc</span>; #按照成绩降序，学号升序的排列学生姓名<br><br># <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> ... <span class="hljs-keyword">having</span>  #对查询结果分组 用<span class="hljs-keyword">having</span>组中信息筛选<br><span class="hljs-keyword">select</span> salary  <span class="hljs-keyword">from</span>  staff  <span class="hljs-keyword">group</span> <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;职位&#x27;</span> <span class="hljs-keyword">having</span> <span class="hljs-built_in">count</span>(<span class="hljs-operator">*</span>)<span class="hljs-operator">&gt;</span><span class="hljs-number">10</span>; #查询<span class="hljs-number">10</span>人以上的职位中的薪资<br><br>#常用聚合函数<br><span class="hljs-built_in">count</span>()  <span class="hljs-built_in">avg</span>()  <span class="hljs-built_in">max</span>()  <span class="hljs-built_in">min</span>()<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><input disabled="" type="checkbox"> 子查询</li>
+</ul>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">TODO</span><br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p><input disabled="" type="checkbox"> </p>
+<h3 id="多表联查"><a href="#多表联查" class="headerlink" title="多表联查"></a>多表联查</h3><p>多表连接</p>
+</li>
+</ul>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-meta">#内连接 （多个表的交集）</span><br><br><span class="hljs-meta">#外连接 （多个表的并集）</span><br><br><span class="hljs-meta">#左连接  （左表加交集）                                          </span><br><br><span class="hljs-meta">#右连接   （右表加交集）    TODO</span><br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/07/28/JavaWeb/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java Web</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/06/23/TODO/TODO/DAO%E6%A8%A1%E5%BC%8F/">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+    
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"left","width":300,"height":600},"mobile":{"show":true,"scale":0.5},"rect":{"opacity":1},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
