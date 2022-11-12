@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/iocn.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="RandallStevens">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SpringSecurity SpringSecurity的权限管理是通过一个过滤器链来实现的 认证默认组件使用springSecurity的组件进行认证逻辑比较麻烦，大概逻辑如下： 12345678910111213141516171819&#x2F;&#x2F;认证过滤器MyAuthenticationProcessingFilter extends AbstractAuthenticationProcessin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringSecurity">
+<meta property="og:url" content="https://randallstevens-chn.github.io/2022/11/08/SpringSecurity/index.html">
+<meta property="og:site_name" content="RandallStevens">
+<meta property="og:description" content="SpringSecurity SpringSecurity的权限管理是通过一个过滤器链来实现的 认证默认组件使用springSecurity的组件进行认证逻辑比较麻烦，大概逻辑如下： 12345678910111213141516171819&#x2F;&#x2F;认证过滤器MyAuthenticationProcessingFilter extends AbstractAuthenticationProcessin">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-08T14:58:04.400Z">
+<meta property="article:modified_time" content="2022-11-11T15:20:52.802Z">
+<meta property="article:author" content="RandallStevens">
+<meta property="article:tag" content="SpringSecurity">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>SpringSecurity - RandallStevens</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"randallstevens-chn.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":80,"cursorChar":" ♫","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 78vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>RandallStevens&#39;Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-books"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于我
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/post_page_img.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="SpringSecurity">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-11-08 22:58" pubdate>
+        2022年11月8日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      96 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">SpringSecurity</h1>
+            
+            <div class="markdown-body">
+              <h1 id="SpringSecurity"><a href="#SpringSecurity" class="headerlink" title="SpringSecurity"></a>SpringSecurity</h1><p> SpringSecurity的权限管理是通过一个过滤器链来实现的</p>
+<h2 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h2><h4 id="默认组件"><a href="#默认组件" class="headerlink" title="默认组件"></a>默认组件</h4><p>使用springSecurity的组件进行认证逻辑比较麻烦，大概逻辑如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//认证过滤器</span><br>MyAuthenticationProcessingFilter <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractAuthenticationProcessingFilter</span>&#123;<br>    <span class="hljs-comment">//拥有一个认证管理器，调用认证处理器认证</span><br>&#125;<br><br><span class="hljs-comment">//认证管理器--》调用认证provider</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyAuthenticationManager</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">AuthenticationManager</span>&#123;<br>    <span class="hljs-comment">//拥有一个AuthenticationProvider 调用其authenticate()方法</span><br>&#125;<br> <br><span class="hljs-comment">//提供真正的认证逻辑    </span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyAuthenticationProvider</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">AuthenticationProvider</span> &#123;<br>    <span class="hljs-comment">//authenticate()方法 完成认证逻辑</span><br>&#125;   <br> <br><span class="hljs-comment">//认证成功处理器 认证失败处理器                                 </span><br>AuthenticationSuccessHandler     /  AuthenticationFailureHandler<br>    <br><span class="hljs-comment">// 还需提供一个 UserDetails   提供安全的用户信息</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="基于JwtToken实现认证"><a href="#基于JwtToken实现认证" class="headerlink" title="基于JwtToken实现认证"></a>基于JwtToken实现认证</h4><p>  这种方式只需自定义一个过滤器，在其中完成认证逻辑，无需上面的套娃。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">JwtAuthenticationTokenFilter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">OncePerRequestFilter</span> &#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UserDetailsService userDetailsService;<br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> JwtTokenUtil jwtTokenUtil;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doFilterInternal</span><span class="hljs-params">(HttpServletRequest request,</span><br><span class="hljs-params">                                    HttpServletResponse response,</span><br><span class="hljs-params">                                    FilterChain chain)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br><br>        <span class="hljs-comment">//检验token是否存在且格式正确</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">token</span> <span class="hljs-operator">=</span> request.getHeader(jwtTokenUtil.getHeaderName());<br>        <span class="hljs-keyword">if</span> (token != <span class="hljs-literal">null</span> &amp;&amp; token.startsWith(jwtTokenUtil.getTokenHead())) &#123;<br>            <span class="hljs-type">String</span> <span class="hljs-variable">authToken</span> <span class="hljs-operator">=</span> token.substring(jwtTokenUtil.getTokenHead().length());<br>            <span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> jwtTokenUtil.getUserNameFromToken(authToken);<br>            log.info(<span class="hljs-string">&quot;checking username:&#123;&#125;&quot;</span>, username);<br>            <span class="hljs-comment">//如果登陆了将用户放入SecurityContextHolder （ThreadLocal）</span><br>            <span class="hljs-keyword">if</span> (username != <span class="hljs-literal">null</span> &amp;&amp; SecurityContextHolder.getContext().getAuthentication() == <span class="hljs-literal">null</span>) &#123;<br>                <span class="hljs-comment">//这里每次都要查数据库</span><br>                <span class="hljs-type">UserDetails</span> <span class="hljs-variable">userDetails</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.userDetailsService.loadUserByUsername(username);<br>                <span class="hljs-keyword">if</span> (jwtTokenUtil.validateToken(authToken, userDetails)) &#123;<br>                    <span class="hljs-type">UsernamePasswordAuthenticationToken</span> <span class="hljs-variable">authentication</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span>                  <span class="hljs-title class_">UsernamePasswordAuthenticationToken</span>(userDetails, <span class="hljs-literal">null</span>, userDetails.getAuthorities());<br>                    authentication.setDetails(<span class="hljs-keyword">new</span> <span class="hljs-title class_">WebAuthenticationDetailsSource</span>().buildDetails(request));<br>                    log.info(<span class="hljs-string">&quot;authenticated user:&#123;&#125;&quot;</span>, username);<br>                    SecurityContextHolder.getContext().setAuthentication(authentication);<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">//继续执行过滤器链；如果未进入上面的if逻辑 即ThreadLocal没有当前用户，则校验失败</span><br>        chain.doFilter(request, response);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Security配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * SpringSecurity 5.4.x以上新用法配置，仅用于配置HttpSecurity</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@EnableWebSecurity</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-comment">//模仿官方stater写法</span><br><span class="hljs-meta">@Import(ComponentConfig.class)</span><br><span class="hljs-meta">@EnableConfigurationProperties(IgnoreUrlsProperties.class)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SecurityConfig</span>  &#123;<br>    <br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> IgnoreUrlsProperties ignoreUrlsConfig;<br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> RestfulAccessDeniedHandler restfulAccessDeniedHandler;<br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> RestAuthenticationEntryPoint restAuthenticationEntryPoint;<br>    <span class="hljs-meta">@Resource</span><br>    <span class="hljs-keyword">private</span> JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;<br>    <span class="hljs-meta">@Autowired(required = false)</span><br>    <span class="hljs-keyword">private</span> DynamicSecurityService dynamicSecurityService;<br>    <span class="hljs-meta">@Autowired(required = false)</span><br>    <span class="hljs-keyword">private</span> DynamicSecurityFilter dynamicSecurityFilter;<br><br>        <span class="hljs-meta">@Bean</span><br>        SecurityFilterChain <span class="hljs-title function_">filterChain</span><span class="hljs-params">(HttpSecurity httpSecurity)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        ExpressionUrlAuthorizationConfigurer&lt;HttpSecurity&gt;.<span class="hljs-type">ExpressionInterceptUrlRegistry</span> <span class="hljs-variable">registry</span> <span class="hljs-operator">=</span> httpSecurity<br>                .authorizeRequests();<br><br>        <span class="hljs-comment">//不需要保护的资源路径允许访问</span><br>        <span class="hljs-keyword">for</span> (String url : ignoreUrlsConfig.getUrls()) &#123;<br>            System.out.println(<span class="hljs-string">&quot;url--&quot;</span> + url);<br>            registry.antMatchers(url).permitAll();<br>        &#125;<br>        <span class="hljs-comment">//允许跨域请求的OPTIONS请求</span><br>        registry.antMatchers(HttpMethod.OPTIONS)<br>                .permitAll();<br><br>        <span class="hljs-comment">// 任何请求需要身份认证</span><br>        registry.and()<br>                .authorizeRequests()<br>                .anyRequest()<br>                .authenticated()<br>                <span class="hljs-comment">// 关闭跨站请求防护及不使用session</span><br>                .and()<br>                .csrf()<br>                .disable()<br>                .sessionManagement()<br>                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)<br>                <span class="hljs-comment">// 自定义权限拒绝处理类</span><br>                .and()<br>                .exceptionHandling()<br>                .accessDeniedHandler(restfulAccessDeniedHandler)<br>                .authenticationEntryPoint(restAuthenticationEntryPoint)<br>                <span class="hljs-comment">// 自定义权限拦截器JWT过滤器</span><br>                .and()<br>                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);<br>        <span class="hljs-comment">//有动态权限配置时添加动态权限校验过滤器</span><br>        <span class="hljs-keyword">if</span> (dynamicSecurityService != <span class="hljs-literal">null</span>) &#123;<br>            registry.and().addFilterBefore(dynamicSecurityFilter, FilterSecurityInterceptor.class);<br>        &#125;<br>        <span class="hljs-keyword">return</span> httpSecurity.build();<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="鉴权"><a href="#鉴权" class="headerlink" title="鉴权"></a>鉴权</h2><h4 id="注解鉴权"><a href="#注解鉴权" class="headerlink" title="注解鉴权"></a>注解鉴权</h4><p>​    springSecurity支持基于注解的鉴权，@EnableGlobalMethodSecurity(prePostEnabled = true) 开启注解模式。</p>
+<p>​    不推荐使用这种方式，拓展性不好，且接口多时配置麻烦</p>
+<h4 id="动态鉴权"><a href="#动态鉴权" class="headerlink" title="动态鉴权"></a>动态鉴权</h4><p>过滤器 ，所有的鉴权操作都会在super.beforeInvocation(fi)中进行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 动态权限过滤器，用于实现基于路径的动态权限过滤</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DynamicSecurityFilter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractSecurityInterceptor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Filter</span> &#123;<br> <br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> DynamicSecurityMetadataSource dynamicSecurityMetadataSource;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> IgnoreUrlsConfig ignoreUrlsConfig;<br> <br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setMyAccessDecisionManager</span><span class="hljs-params">(DynamicAccessDecisionManager dynamicAccessDecisionManager)</span> &#123;<br>        <span class="hljs-built_in">super</span>.setAccessDecisionManager(dynamicAccessDecisionManager);<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">(FilterConfig filterConfig)</span> <span class="hljs-keyword">throws</span> ServletException &#123;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doFilter</span><span class="hljs-params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="hljs-keyword">throws</span> IOException, ServletException &#123;<br>        <span class="hljs-type">HttpServletRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> (HttpServletRequest) servletRequest;<br>        <span class="hljs-type">FilterInvocation</span> <span class="hljs-variable">fi</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FilterInvocation</span>(servletRequest, servletResponse, filterChain);<br>        <span class="hljs-comment">//OPTIONS请求直接放行</span><br>        <span class="hljs-keyword">if</span>(request.getMethod().equals(HttpMethod.OPTIONS.toString()))&#123;<br>            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-comment">//白名单请求直接放行</span><br>        <span class="hljs-type">PathMatcher</span> <span class="hljs-variable">pathMatcher</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AntPathMatcher</span>();<br>        <span class="hljs-keyword">for</span> (String path : ignoreUrlsConfig.getUrls()) &#123;<br>            <span class="hljs-keyword">if</span>(pathMatcher.match(path,request.getRequestURI()))&#123;<br>                fi.getChain().doFilter(fi.getRequest(), fi.getResponse());<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">//此处会调用AccessDecisionManager中的decide方法进行鉴权操作</span><br>        <span class="hljs-type">InterceptorStatusToken</span> <span class="hljs-variable">token</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">super</span>.beforeInvocation(fi);<br>        <span class="hljs-keyword">try</span> &#123;<br>            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-built_in">super</span>.afterInvocation(token, <span class="hljs-literal">null</span>);<br>        &#125;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroy</span><span class="hljs-params">()</span> &#123;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Class&lt;?&gt; getSecureObjectClass() &#123;<br>        <span class="hljs-keyword">return</span> FilterInvocation.class;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> SecurityMetadataSource <span class="hljs-title function_">obtainSecurityMetadataSource</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> dynamicSecurityMetadataSource;<br>    &#125;<br> <br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>在DynamicSecurityFilter中调用super.beforeInvocation(fi)方法时会调用AccessDecisionManager中的decide方法用于鉴权操作，而decide方法中的configAttributes参数会通过SecurityMetadataSource中的getAttributes方法来获取，configAttributes其实就是配置好的访问当前接口所需要的权限.<br>接下来我们就需要创建一个类来继承AccessDecisionManager，通过decide方法对访问接口所需权限和用户拥有的权限进行匹配，匹配则放</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 动态权限决策管理器，用于判断用户是否有访问权限</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DynamicAccessDecisionManager</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">AccessDecisionManager</span> &#123;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">decide</span><span class="hljs-params">(Authentication authentication, Object object,</span><br><span class="hljs-params">                       Collection&lt;ConfigAttribute&gt; configAttributes)</span> <span class="hljs-keyword">throws</span> AccessDeniedException, InsufficientAuthenticationException &#123;<br>        <span class="hljs-comment">// 当接口未被配置资源时直接放行</span><br>        <span class="hljs-keyword">if</span> (CollUtil.isEmpty(configAttributes)) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        Iterator&lt;ConfigAttribute&gt; iterator = configAttributes.iterator();<br>        <span class="hljs-keyword">while</span> (iterator.hasNext()) &#123;<br>            <span class="hljs-type">ConfigAttribute</span> <span class="hljs-variable">configAttribute</span> <span class="hljs-operator">=</span> iterator.next();<br>            <span class="hljs-comment">//将访问所需资源或用户拥有资源进行比对</span><br>            <span class="hljs-type">String</span> <span class="hljs-variable">needAuthority</span> <span class="hljs-operator">=</span> configAttribute.getAttribute();<br>            <span class="hljs-keyword">for</span> (GrantedAuthority grantedAuthority : authentication.getAuthorities()) &#123;<br>                <span class="hljs-keyword">if</span> (needAuthority.trim().equals(grantedAuthority.getAuthority())) &#123;<br>                    <span class="hljs-keyword">return</span>;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AccessDeniedException</span>(<span class="hljs-string">&quot;抱歉，您没有访问权限&quot;</span>);<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">supports</span><span class="hljs-params">(ConfigAttribute configAttribute)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">supports</span><span class="hljs-params">(Class&lt;?&gt; aClass)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br> <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>decide方法中的configAttributes参数会通过SecurityMetadataSource中的getAttributes方法来获取，configAttributes其实就是访问当前接口所需要的权限.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DynamicSecurityMetadataSource</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">FilterInvocationSecurityMetadataSource</span> &#123;<br> <br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Map&lt;String, ConfigAttribute&gt; configAttributeMap = <span class="hljs-literal">null</span>;<br>    <span class="hljs-comment">//通过service来加载configAttributeMap</span><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> DynamicSecurityService dynamicSecurityService;<br> <br>    <span class="hljs-meta">@PostConstruct</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">loadDataSource</span><span class="hljs-params">()</span> &#123;<br>        configAttributeMap = dynamicSecurityService.loadDataSource();<br>    &#125;<br> <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">clearDataSource</span><span class="hljs-params">()</span> &#123;<br>        configAttributeMap.clear();<br>        configAttributeMap = <span class="hljs-literal">null</span>;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Collection&lt;ConfigAttribute&gt; <span class="hljs-title function_">getAttributes</span><span class="hljs-params">(Object o)</span> <span class="hljs-keyword">throws</span> IllegalArgumentException &#123;<br>        <span class="hljs-keyword">if</span> (configAttributeMap == <span class="hljs-literal">null</span>) <span class="hljs-built_in">this</span>.loadDataSource();<br>        List&lt;ConfigAttribute&gt;  configAttributes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        <span class="hljs-comment">//获取当前访问的路径</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> ((FilterInvocation) o).getRequestUrl();<br>        <span class="hljs-type">String</span> <span class="hljs-variable">path</span> <span class="hljs-operator">=</span> URLUtil.getPath(url);<br>        <span class="hljs-type">PathMatcher</span> <span class="hljs-variable">pathMatcher</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AntPathMatcher</span>();<br>        Iterator&lt;String&gt; iterator = configAttributeMap.keySet().iterator();<br>        <span class="hljs-comment">//获取访问该路径所需资源</span><br>        <span class="hljs-keyword">while</span> (iterator.hasNext()) &#123;<br>            <span class="hljs-type">String</span> <span class="hljs-variable">pattern</span> <span class="hljs-operator">=</span> iterator.next();<br>            <span class="hljs-keyword">if</span> (pathMatcher.match(pattern, path)) &#123;<br>                configAttributes.add(configAttributeMap.get(pattern));<br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">// 未设置操作请求权限，返回空集合</span><br>        <span class="hljs-keyword">return</span> configAttributes;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Collection&lt;ConfigAttribute&gt; <span class="hljs-title function_">getAllConfigAttributes</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">supports</span><span class="hljs-params">(Class&lt;?&gt; aClass)</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br> <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>所有路径对应的权限值数据来自于自定义的DynamicSecurityService；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 动态权限相关业务类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">DynamicSecurityService</span> &#123;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 权限MAP</span><br><span class="hljs-comment">     */</span><br>    Map&lt;String, ConfigAttribute&gt; <span class="hljs-title function_">loadDataSource</span><span class="hljs-params">()</span>;<br>&#125;<br> <br><br></code></pre></td></tr></table></figure>
+
+<p>鉴权失败后的处理器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 自定义返回结果：没有权限访问时</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RestfulAccessDeniedHandler</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">AccessDeniedHandler</span>&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">handle</span><span class="hljs-params">(HttpServletRequest request,</span><br><span class="hljs-params">                       HttpServletResponse response,</span><br><span class="hljs-params">                       AccessDeniedException e)</span> <span class="hljs-keyword">throws</span> IOException, ServletException &#123;<br>        response.setHeader(<span class="hljs-string">&quot;Access-Control-Allow-Origin&quot;</span>, <span class="hljs-string">&quot;*&quot;</span>);<br>        response.setHeader(<span class="hljs-string">&quot;Cache-Control&quot;</span>,<span class="hljs-string">&quot;no-cache&quot;</span>);<br>        response.setCharacterEncoding(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>        response.setContentType(<span class="hljs-string">&quot;application/json&quot;</span>);<br>        response.getWriter().println(JSONUtil.parse(CommonResult.forbidden(e.getMessage())));<br>        response.getWriter().flush();<br>    &#125;<br>&#125;<br> <br></code></pre></td></tr></table></figure>
+
+<p>SpringSecurity配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 对SpringSecurity的配置的扩展，支持自定义白名单资源路径和查询用户逻辑</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SecurityConfig</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">WebSecurityConfigurerAdapter</span> &#123;<br> <br>    <span class="hljs-meta">@Autowired(required = false)</span><br>    <span class="hljs-keyword">private</span> DynamicSecurityService dynamicSecurityService;<br> <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">configure</span><span class="hljs-params">(HttpSecurity httpSecurity)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        ExpressionUrlAuthorizationConfigurer&lt;HttpSecurity&gt;.<span class="hljs-type">ExpressionInterceptUrlRegistry</span> <span class="hljs-variable">registry</span> <span class="hljs-operator">=</span> httpSecurity<br>                .authorizeRequests();<br>        <span class="hljs-comment">//有动态权限配置时添加动态权限校验过滤器</span><br>        <span class="hljs-keyword">if</span>(dynamicSecurityService!=<span class="hljs-literal">null</span>)&#123;<br>            registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);<br>        &#125;<br>    &#125;<br> <br>    <span class="hljs-meta">@ConditionalOnBean(name = &quot;dynamicSecurityService&quot;)</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> DynamicAccessDecisionManager <span class="hljs-title function_">dynamicAccessDecisionManager</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DynamicAccessDecisionManager</span>();<br>    &#125;<br> <br> <br>    <span class="hljs-meta">@ConditionalOnBean(name = &quot;dynamicSecurityService&quot;)</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> DynamicSecurityFilter <span class="hljs-title function_">dynamicSecurityFilter</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DynamicSecurityFilter</span>();<br>    &#125;<br> <br>    <span class="hljs-meta">@ConditionalOnBean(name = &quot;dynamicSecurityService&quot;)</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> DynamicSecurityMetadataSource <span class="hljs-title function_">dynamicSecurityMetadataSource</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DynamicSecurityMetadataSource</span>();<br>    &#125;<br> <br>&#125;<br> <br></code></pre></td></tr></table></figure>
+
+<p> 使用时，只需继承当DynamicSecurityService重写loadDataSource()，提供权限信息；</p>
+<p> 另外用户角色权限变动时，应该刷新权限信息datasouce</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RequestMapping(&quot;/resource&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UmsResourceController</span> &#123;<br> <br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UmsResourceService resourceService;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> DynamicSecurityMetadataSource dynamicSecurityMetadataSource;<br> <br>    <span class="hljs-meta">@RequestMapping(value = &quot;/create&quot;, method = RequestMethod.POST)</span><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-keyword">public</span> CommonResult <span class="hljs-title function_">create</span><span class="hljs-params">(<span class="hljs-meta">@RequestBody</span> UmsResource umsResource)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> resourceService.create(umsResource);<br>        <span class="hljs-comment">//权限更新，刷新</span><br>        dynamicSecurityMetadataSource.clearDataSource();<br>        <span class="hljs-keyword">if</span> (count &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> CommonResult.success(count);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">return</span> CommonResult.failed();<br>        &#125;<br>    &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>完整代码： </p>
+<p>[<a target="_blank" rel="noopener" href="https://gitee.com/randallstevens/javaCommonCode/tree/master/Security/SpringSecurity">Security/SpringSecurity ·  -  (gitee.com)</a>]:</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/SpringSecurity/">SpringSecurity</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/12/AOP%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">AOP日志记录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/23/Redis%E5%9F%BA%E7%A1%80/">
+                        <span class="hidden-mobile">redis基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+    
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"left","width":300,"height":600},"mobile":{"show":true,"scale":0.5},"rect":{"opacity":1},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
